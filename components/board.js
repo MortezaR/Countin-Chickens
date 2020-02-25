@@ -35,7 +35,7 @@ class Board {
             let color = COLORS[Math.floor(Math.random() * COLORS.length)];
             switch (amount) {
                 case 0:
-                    amount = -1;
+                    amount = (-1);
                     break;
                 case 1:
                     amount = 2;
@@ -78,20 +78,24 @@ class Board {
         return retVal;
     }
     addMultiTile(x, y, amount, dir, color ){
-        this.grid[x][y].makeMultiTile(amount, dir, color);
         if(dir === 'vertical'){
             for(let j = 0; j< this.grid[0].length; j++){
-                if (this.grid[x][j].color === color || color === 'wild'){
+                if (this.grid[x][j].color === color || color === 'wild' 
+                || this.grid[x][j].color === 'wild'){
+                    console.log('m');
                     this.grid[x][j].multi *= amount;
                 }
             }
         }else if( dir === 'horizontal'){
             for (let i = 0; i < this.grid[0].length; i++) {
-                if (this.grid[i][y].color === color || color === 'wild'){
+                if (this.grid[i][y].color === color || color === 'wild' 
+                || this.grid[x][j].color === 'wild'){
+                    console.log('mm');
                     this.grid[i][y].multi *= amount;
                 }
             }
         }
+        this.grid[x][y].makeMultiTile(amount, dir, color);
     }
     generateCard(){
         let equ = Math.ceil(Math.random() * 2);
@@ -100,9 +104,9 @@ class Board {
         let shape2 = SHAPES[Math.floor(Math.random() * SHAPES.length)];
         let color2 = COLORS[Math.floor(Math.random() * COLORS.length)];
         if(equ === 1){
-            this.answer = Math.abs(this.calculate(shape, color) - this.calculate(shape2, color2))
+            this.answer = this.calculate(shape, color) - this.calculate(shape2, color2)
         } else if(equ === 2){
-            this.answer = Math.abs(this.calculate(shape, color) + this.calculate(shape2, color2))
+            this.answer = this.calculate(shape, color) + this.calculate(shape2, color2)
         }
         console.log('this is the actual answer -=> ', this.answer);
         this.currentCard = {
