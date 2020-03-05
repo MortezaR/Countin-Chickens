@@ -203,17 +203,19 @@ function () {
   }, {
     key: "addMultiTile",
     value: function addMultiTile(x, y, amount, dir, color) {
+      this.grid[x][y].color = null;
+
       if (dir === 'vertical') {
         for (var j = 0; j < this.grid[0].length; j++) {
-          if (this.grid[x][j].color === color || color === 'wild') {
-            console.log('m');
+          if (this.grid[x][j].color === color || color === 'wild' || this.grid[x][j].color === 'wild') {
+            console.log(x, j, 'ver');
             this.grid[x][j].multi *= amount;
           }
         }
       } else if (dir === 'horizontal') {
         for (var i = 0; i < this.grid[0].length; i++) {
-          if (this.grid[i][y].color === color || color === 'wild') {
-            console.log('mm');
+          if (this.grid[i][y].color === color || color === 'wild' || this.grid[i][y].color === 'wild') {
+            console.log(i, y, 'hor');
             this.grid[i][y].multi *= amount;
           }
         }
@@ -605,6 +607,7 @@ function runGame() {
   game.draw(game_canvas);
   var score = document.createElement('div');
   score.innerHTML = 'Score: ' + game.score;
+  score.id = 'score';
   root.appendChild(score);
   var inputField = document.createElement("INPUT");
   inputField.setAttribute("type", "text");
