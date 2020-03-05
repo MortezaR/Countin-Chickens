@@ -15,6 +15,7 @@ function runGame(){
     game.draw(game_canvas);
     let score = document.createElement('div');
     score.innerHTML = 'Score: ' + game.score;
+    score.id = 'score';
     root.appendChild(score);
 
     
