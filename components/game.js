@@ -12,14 +12,14 @@ class Game {
         this.board.draw(ctx);
     }
     guess(num){
-        if(num == this.board.answer){
+        if(num == this.board.answers[0]){
             this.score += 1;
-            this.board.currentCardNum += 1;
-            if(this.board.currentCardNum < 3){
-                this.board.generateCard();
+            this.board.answers.shift();
+            this.board.promptCards.shift();
+            if(this.board.promptCards < 1){
+                this.board.newBoard();
             }else{
-                this.board.newBoard(2);
-                this.board.currentCardNum = 0;
+                // this.board.drawPromptCard(canvasEl);
             }
         }
     }

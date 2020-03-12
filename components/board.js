@@ -1,119 +1,70 @@
 
 const Tile = require('./tile')
-const SHAPES = ['circle', 'square', 'triangle', 'wild'];
-const COLORS = ['red', 'blue', 'green', 'wild'];
+const {easy_deck, hard_deck, sum_deck, sprites} = require('./util');
 
 class Board {
     constructor(width, height){
         this.grid = new Array(width);
-        this.multiTiles = [];
         for (let i = 0; i < width; i++) {
             this.grid[i] = new Array(height);
         }
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < height; j++) {
-                this.grid[i][j] = new Tile(i*100 + 300, j*100 + 300);
+                this.grid[i][j] = new Tile(i*101.25 + 600, j*157.5);
             }
         }
-        this.currentCard = null;
-        this.currentCardNum = 0;
-        this.answer = null;
-        this.newBoard(2);
+        this.promptCards = [];
+        this.answers = [];
+        this.newBoard();
     }
-    newBoard(numMultiTiles){
-        for (let i = 0; i < this.grid.length; i++) {
-            for (let j = 0; j < this.grid[i].length; j++) {
-                let t = this.grid[i][j];
-                t.randomizeTile();
+    newBoard(){
+        let keys = Object.keys(easy_deck);
+        let tDeckLen = Object.keys(easy_deck).length;
+        const gridSize = this.grid.length * this.grid[0].length;
+        for (let i = 0; i < gridSize; i++) {
+            let key = Math.floor(Math.random() * (tDeckLen-i));
+            console.log(key);
+            this.grid[i%this.grid.length][Math.floor(i/this.grid.length)].key = keys[key];
+            [keys[key], keys[tDeckLen-i-1]] = [keys[tDeckLen-i-1], keys[key]];
+        }
+        while (this.promptCards.length < 3){
+            let val = Math.floor(Math.random() * Object.keys(sum_deck).length);
+            let keys = Object.keys(sum_deck);
+            let answer = 0;
+            if(!this.promptCards.includes(val)){
+                this.promptCards.push(keys[val])
+                let pCard = sum_deck[keys[val]].values;
+                for(let i = 0; i < pCard.length; i++){
+                    answer += this.calculate(pCard[i].type, pCard[i].color);
+                }
+                this.answers.push(answer);
+                console.log('answer -> ', answer);
             }
         }
-        for(let i = 0; i< numMultiTiles; i++){
-            let x = Math.floor(Math.random() * this.grid.length);
-            let y = Math.floor(Math.random() * this.grid[x].length);
-            let dir = Math.ceil(Math.random() * 2);
-            let amount = Math.floor(Math.random() * 3);
-            let color = COLORS[Math.floor(Math.random() * COLORS.length)];
-            switch (amount) {
-                case 0:
-                    amount = (-1);
-                    break;
-                case 1:
-                    amount = 2;
-                    break;
-                case 2:
-                    amount = 3;
-                    break;
-                default:
-                    break;
-            }
-            this.addMultiTile(x, y, amount, dir === 1 ? 'vertical' : 'horizontal', color);
-        }
-        this.generateCard();
     }
     draw(ctx){
-        ctx.fillStyle = "#000000";
-        ctx.font = "50px Arial";
-        ctx.fillText(this.currentCard.equation === 'sum' ? 'sum': 'diff' ,
-        this.currentCard.first.x, this.currentCard.first.y -30);
-
-        this.currentCard.first.draw(ctx);
-        this.currentCard.second.draw(ctx);
         for(let i = 0; i < this.grid.length; i++){
             for (let j = 0; j < this.grid[i].length; j++) {
                 this.grid[i][j].draw(ctx);
             }
         }
+        sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
     }
-    calculate(shape, color){
+    calculate(type, color){
         retVal = 0;
         for (let i = 0; i < this.grid.length; i++) {
             for (let j = 0; j < this.grid[i].length; j++) {
-                let t = this.grid[i][j];
-                if ((t.shape === shape || t.shape === 'wild' || shape === 'wild') 
-                && (t.color === color || t.color === 'wild' || color === 'wild')){
-                    retVal += t.value * t.multi;
+                let t = hard_deck[this.grid[i][j].key];
+                // debugger;
+                for(let k = 1; k <= Object.keys(t).length; k++){
+                    if ((t[k].type === type || t[k].type === 'wild' || type === 'wild') 
+                    && (t[k].color === color || t[k].color === 'black' || color === 'black')){
+                        retVal += t[k].value;
+                    }
                 }
             }
         }
         return retVal;
-    }
-    addMultiTile(x, y, amount, dir, color ){
-        this.grid[x][y].color = null;
-        if(dir === 'vertical'){
-            for(let j = 0; j< this.grid[0].length; j++){
-                if (this.grid[x][j].color === color || color === 'wild' 
-                || this.grid[x][j].color === 'wild'){
-                    console.log(x, j, 'ver');
-                    this.grid[x][j].multi *= amount;
-                }
-            }
-        }else if( dir === 'horizontal'){
-            for (let i = 0; i < this.grid[0].length; i++) {
-                if (this.grid[i][y].color === color || color === 'wild' 
-                || this.grid[i][y].color === 'wild'){
-                    console.log(i, y, 'hor');
-                    this.grid[i][y].multi *= amount;
-                }
-            }
-        }
-        this.grid[x][y].makeMultiTile(amount, dir, color);
-    }
-    generateCard(){
-        let equ = Math.ceil(Math.random() * 2);
-        let shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-        let color = COLORS[Math.floor(Math.random() * COLORS.length)];
-        let shape2 = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-        let color2 = COLORS[Math.floor(Math.random() * COLORS.length)];
-        if(equ === 1){
-            this.answer = this.calculate(shape, color) - this.calculate(shape2, color2)
-        } else if(equ === 2){
-            this.answer = this.calculate(shape, color) + this.calculate(shape2, color2)
-        }
-        console.log('this is the actual answer -=> ', this.answer);
-        this.currentCard = {
-        equation: equ === 1 ? 'difference' : 'sum',
-        first: new Tile(350, 100, {shape: shape, color: color}),
-        second: new Tile(450, 100, { shape: shape2, color: color2 })};
     }
 }
 
