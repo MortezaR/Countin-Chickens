@@ -18,6 +18,18 @@ function runGame(){
     score.id = 'score';
     root.appendChild(score);
 
+    let time = 100;
+    let timer = document.createElement('div');
+    timer.innerHTML = ' Time: ' + time;
+    timer.id = 'timer';
+    root.appendChild(timer);
+    const runTime = () => {
+        time -= 1;
+        timer.innerHTML = ' Time: ' + time;
+    }
+    setInterval(runTime, 1000);
+
+
     
     let inputField = document.createElement("INPUT");
     inputField.setAttribute("type", "text");

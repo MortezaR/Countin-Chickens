@@ -173,9 +173,13 @@ function () {
         for (var j = 0; j < this.grid[i].length; j++) {
           this.grid[i][j].draw(ctx);
         }
-      }
+      } // rotate around that point, converting our 
+      // angle from degrees to radians 
+      // draw it up and to the left by half the width
+      // and height of the image 
 
-      sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
+
+      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15); // and restore the co-ords to how they were when we began
     }
   }, {
     key: "calculate",
@@ -184,7 +188,7 @@ function () {
 
       for (var i = 0; i < this.grid.length; i++) {
         for (var j = 0; j < this.grid[i].length; j++) {
-          var t = hard_deck[this.grid[i][j].key]; // debugger;
+          var t = hard_deck[this.grid[i][j].key];
 
           for (var k = 1; k <= Object.keys(t).length; k++) {
             if ((t[k].type === type || t[k].type === 'wild' || type === 'wild') && (t[k].color === color || t[k].color === 'black' || color === 'black')) {
@@ -308,6 +312,29 @@ function () {
       } else {
         setTimeout(function () {
           return _this2.draw(ctx, x, y, hMul, wMul);
+        }, 100);
+      } // ctx.beginPath();
+      // ctx.arc(x + this.height / 2, y + this.height / 2, this.height/2, 0, 2 * Math.PI);
+      // ctx.fill();
+
+    }
+  }, {
+    key: "drawRotated",
+    value: function drawRotated(ctx, x, y) {
+      var _this3 = this;
+
+      var hMul = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+      var wMul = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
+
+      if (this.loaded) {
+        ctx.save();
+        ctx.translate(200, 200);
+        ctx.rotate(Math.PI / 2);
+        ctx.drawImage(this.image, 0, 0, this.width, this.height, x, y, this.width * hMul, this.height * wMul);
+        ctx.restore();
+      } else {
+        setTimeout(function () {
+          return _this3.drawRotated(ctx, x, y, hMul, wMul);
         }, 100);
       } // ctx.beginPath();
       // ctx.arc(x + this.height / 2, y + this.height / 2, this.height/2, 0, 2 * Math.PI);
@@ -1371,6 +1398,159 @@ var sum_deck = {
       type: 'pig'
     }]
   },
+  ucyp: {
+    values: [{
+      color: 'blue',
+      type: 'chicken'
+    }, {
+      color: 'yellow',
+      type: 'pig'
+    }]
+  },
+  uprs: {
+    values: [{
+      color: 'blue',
+      type: 'pig'
+    }, {
+      color: 'red',
+      type: 'sheep'
+    }]
+  },
+  upys: {
+    values: [{
+      color: 'blue',
+      type: 'pig'
+    }, {
+      color: 'yellow',
+      type: 'sheep'
+    }]
+  },
+  usrc: {
+    values: [{
+      color: 'blue',
+      type: 'sheep'
+    }, {
+      color: 'red',
+      type: 'chicken'
+    }]
+  },
+  usyc: {
+    values: [{
+      color: 'blue',
+      type: 'sheep'
+    }, {
+      color: 'yellow',
+      type: 'chicken'
+    }]
+  },
+  rcbp: {
+    values: [{
+      color: 'red',
+      type: 'chicken'
+    }, {
+      color: 'blue',
+      type: 'pig'
+    }]
+  },
+  rcyp: {
+    values: [{
+      color: 'red',
+      type: 'chicken'
+    }, {
+      color: 'yellow',
+      type: 'pig'
+    }]
+  },
+  rpbs: {
+    values: [{
+      color: 'red',
+      type: 'pig'
+    }, {
+      color: 'blue',
+      type: 'sheep'
+    }]
+  },
+  rpys: {
+    values: [{
+      color: 'red',
+      type: 'pig'
+    }, {
+      color: 'yellow',
+      type: 'sheep'
+    }]
+  },
+  rsbc: {
+    values: [{
+      color: 'red',
+      type: 'sheep'
+    }, {
+      color: 'blue',
+      type: 'chicken'
+    }]
+  },
+  rsyc: {
+    values: [{
+      color: 'red',
+      type: 'sheep'
+    }, {
+      color: 'yellow',
+      type: 'chicken'
+    }]
+  },
+  ycbp: {
+    values: [{
+      color: 'yellow',
+      type: 'chicken'
+    }, {
+      color: 'blue',
+      type: 'pig'
+    }]
+  },
+  ycrp: {
+    values: [{
+      color: 'yellow',
+      type: 'chicken'
+    }, {
+      color: 'red',
+      type: 'pig'
+    }]
+  },
+  ypbs: {
+    values: [{
+      color: 'yellow',
+      type: 'pig'
+    }, {
+      color: 'blue',
+      type: 'sheep'
+    }]
+  },
+  yprs: {
+    values: [{
+      color: 'yellow',
+      type: 'pig'
+    }, {
+      color: 'red',
+      type: 'sheep'
+    }]
+  },
+  ysbc: {
+    values: [{
+      color: 'yellow',
+      type: 'sheep'
+    }, {
+      color: 'blue',
+      type: 'chicken'
+    }]
+  },
+  ysrc: {
+    values: [{
+      color: 'yellow',
+      type: 'sheep'
+    }, {
+      color: 'red',
+      type: 'chicken'
+    }]
+  },
   uw: {
     values: [{
       color: 'blue',
@@ -1513,6 +1693,23 @@ var sprites = {
   oysorsobs: new Sprite('.././images/3wildsheep.png', 675, 1050),
   oyporpobp: new Sprite('.././images/3wildpig.png', 675, 1050),
   ucrp: new Sprite('.././images/Sumbluechickenredpig.png', 675, 1050),
+  ucyp: new Sprite('.././images/Sumbluechickenyellowpig.png', 675, 1050),
+  uprs: new Sprite('.././images/Sumbluepigredsheep.png', 675, 1050),
+  upys: new Sprite('.././images/Sumbluepigyellowsheep.png', 675, 1050),
+  usrc: new Sprite('.././images/Sumbluesheepredchicken.png', 675, 1050),
+  usyc: new Sprite('.././images/Sumbluesheepyellowchicken.png', 675, 1050),
+  rcbp: new Sprite('.././images/Sumredchickenbluepig.png', 675, 1050),
+  rcyp: new Sprite('.././images/Sumredchickenyellowpig.png', 675, 1050),
+  rpbs: new Sprite('.././images/Sumredpigbluesheep.png', 675, 1050),
+  rpys: new Sprite('.././images/Sumredpigyellowsheep.png', 675, 1050),
+  rsbc: new Sprite('.././images/Sumredsheepbluechicken.png', 675, 1050),
+  rsyc: new Sprite('.././images/Sumredsheepyellowchicken.png', 675, 1050),
+  ycbp: new Sprite('.././images/Sumyellowchickenbluepig.png', 675, 1050),
+  ycrp: new Sprite('.././images/Sumyellowchickenredpig.png', 675, 1050),
+  ypbs: new Sprite('.././images/Sumyellowpigbluesheep.png', 675, 1050),
+  yprs: new Sprite('.././images/Sumyellowpigredsheep.png', 675, 1050),
+  ysbc: new Sprite('.././images/Sumyellowsheepbluechicken.png', 675, 1050),
+  ysrc: new Sprite('.././images/Sumyellowsheepredchicken.png', 675, 1050),
   uw: new Sprite('.././images/TotalBlue.png', 675, 1050),
   rw: new Sprite('.././images/TotalRed.png', 675, 1050),
   yw: new Sprite('.././images/TotalYellow.png', 675, 1050),
@@ -1555,6 +1752,18 @@ function runGame() {
   score.innerHTML = 'Score: ' + game.score;
   score.id = 'score';
   root.appendChild(score);
+  var time = 100;
+  var timer = document.createElement('div');
+  timer.innerHTML = ' Time: ' + time;
+  timer.id = 'timer';
+  root.appendChild(timer);
+
+  var runTime = function runTime() {
+    time -= 1;
+    timer.innerHTML = ' Time: ' + time;
+  };
+
+  setInterval(runTime, 1000);
   var inputField = document.createElement("INPUT");
   inputField.setAttribute("type", "text");
   root.appendChild(inputField);

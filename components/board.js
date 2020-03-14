@@ -48,14 +48,24 @@ class Board {
                 this.grid[i][j].draw(ctx);
             }
         }
-        sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
+
+        // rotate around that point, converting our 
+        // angle from degrees to radians 
+        
+
+        // draw it up and to the left by half the width
+        // and height of the image 
+        sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15);
+        // and restore the co-ords to how they were when we began
+        
+        
+
     }
     calculate(type, color){
         retVal = 0;
         for (let i = 0; i < this.grid.length; i++) {
             for (let j = 0; j < this.grid[i].length; j++) {
                 let t = hard_deck[this.grid[i][j].key];
-                // debugger;
                 for(let k = 1; k <= Object.keys(t).length; k++){
                     if ((t[k].type === type || t[k].type === 'wild' || type === 'wild') 
                     && (t[k].color === color || t[k].color === 'black' || color === 'black')){
