@@ -278,6 +278,8 @@ function () {
               if (color !== 'black') {
                 tileVal *= this.grid[_i3][_j].multiplier.black;
               }
+
+              console.log('tile value ', tileVal, ' coordinates ', _i3, _j);
             }
           }
 

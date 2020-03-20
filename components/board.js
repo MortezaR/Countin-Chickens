@@ -136,6 +136,7 @@ class Board {
                         if(color !== 'black'){
                             tileVal *= this.grid[i][j].multiplier.black;
                         }
+                        console.log('tile value ', tileVal, ' coordinates ', i, j);
                     }
                 }
                 retVal += tileVal;
