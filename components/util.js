@@ -268,9 +268,6 @@ let sprites = {
     oysorsobs: new Sprite('.././images/3wildsheep.png', 675, 1050),
     oyporpobp: new Sprite('.././images/3wildpig.png', 675, 1050),
 
-
-
-
     ucrp: new Sprite('.././images/Sumbluechickenredpig.png', 675, 1050),
     ucyp: new Sprite('.././images/Sumbluechickenyellowpig.png', 675, 1050),
     uprs: new Sprite('.././images/Sumbluepigredsheep.png', 675, 1050),
@@ -295,7 +292,79 @@ let sprites = {
     bc: new Sprite('.././images/Totalchicken.png', 675, 1050),
     bp: new Sprite('.././images/Totalpig.png', 675, 1050),
     bs: new Sprite('.././images/Totalsheep.png', 675, 1050),
-}
-let hard_deck = easy_deck;
 
-module.exports = {sum_deck, easy_deck, hard_deck, sprites}
+    dbr: new Sprite('.././images/DifferenceBlueRed.png', 675, 1050),
+    dcp: new Sprite('.././images/Differencechickenpig.png', 675, 1050),
+    dps: new Sprite('.././images/Differencepigsheep.png', 675, 1050),
+    dry: new Sprite('.././images/DifferenceRedYellow.png', 675, 1050),
+    dsc: new Sprite('.././images/Differencesheepchicken.png', 675, 1050),
+    dyb: new Sprite('.././images/DifferenceYellowBlue.png', 675, 1050),
+
+    dh: new Sprite('.././images/DoubleHorizontal.png', 675, 1050),
+    dv: new Sprite('.././images/DoubleVertical.png', 675, 1050),
+    oh: new Sprite('.././images/OppositeHorizontal.png', 675, 1050),
+    ov: new Sprite('.././images/OppositeVertical.png', 675, 1050),
+    hvb: new Sprite('.././images/Tripleverticalblue.png', 675, 1050),
+    hvr: new Sprite('.././images/Tripleverticalred.png', 675, 1050),
+    hvy: new Sprite('.././images/Tripleverticalyellow.png', 675, 1050),
+    hdo: new Sprite('.././images/x3Diagonal1.png', 675, 1050),
+    hdt: new Sprite('.././images/x3Diagonal2.png', 675, 1050),
+
+    dbr2: new Sprite('.././images/DifferenceBlueRed.png', 675, 1050),
+    dcp2: new Sprite('.././images/Differencechickenpig.png', 675, 1050),
+    dps2: new Sprite('.././images/Differencepigsheep.png', 675, 1050),
+    dry2: new Sprite('.././images/DifferenceRedYellow.png', 675, 1050),
+    dsc2: new Sprite('.././images/Differencesheepchicken.png', 675, 1050),
+    dyb2: new Sprite('.././images/DifferenceYellowBlue.png', 675, 1050),
+
+    dh2: new Sprite('.././images/DoubleHorizontal.png', 675, 1050),
+    dv2: new Sprite('.././images/DoubleVertical.png', 675, 1050),
+    oh2: new Sprite('.././images/OppositeHorizontal.png', 675, 1050),
+    ov2: new Sprite('.././images/OppositeVertical.png', 675, 1050),
+    hvb2: new Sprite('.././images/Tripleverticalblue.png', 675, 1050),
+    hvr2: new Sprite('.././images/Tripleverticalred.png', 675, 1050),
+    hvy2: new Sprite('.././images/Tripleverticalyellow.png', 675, 1050),
+    hdo2: new Sprite('.././images/x3Diagonal1.png', 675, 1050),
+    hdt2: new Sprite('.././images/x3Diagonal2.png', 675, 1050),
+}
+
+// let hard_deck = easy_deck;
+// let diff_deck = sum_deck;
+
+let diff_cards = {
+    dbr: {values: [{ color: 'blue', type: 'wild'},{color: 'red', type: 'wild'}]},
+    dcp: {values: [{ color: 'black', type: 'chicken'},{color: 'black', type: 'pig'}]},
+    dps: {values: [{ color: 'black', type: 'pig'},{color: 'black', type: 'sheep'}]},
+    dry: {values: [{ color: 'red', type: 'wild'},{color: 'yellow', type: 'wild'}]},
+    dsc: {values: [{ color: 'black', type: 'sheep'},{color: 'black', type: 'chicken'}]},
+    dyb: {values: [{ color: 'yellow', type: 'wild'},{color: 'blue', type: 'wild'}]}
+}
+
+let hard_cards = {
+    dh: { 1: { value: 0, direction: 'horizontal', color: 'black', amount: 2 } },
+    dv: { 1: { value: 0, direction: 'vertical', color: 'black', amount: 2} },
+    oh: { 1: { value: 0, direction: 'horizontal', color: 'black', amount: -1} },
+    ov: { 1: { value: 0, direction: 'vertical', color: 'black', amount: -1} },
+    hvb: { 1: { value: 0, direction: 'vertical', color: 'blue', amount: 3} },
+    hvr: { 1: { value: 0, direction: 'vertical', color: 'red', amount: 3} },
+    hvy: { 1: { value: 0, direction: 'vertical', color: 'yellow', amount: 3} },
+    hdo: { 1: { value: 0, direction: 'diagonal1', color: 'black', amount: 3} },
+    hdt: { 1: { value: 0, direction: 'diagonal2', color: 'black', amount: 3} }
+}
+let hard_cards2 = {
+    dh2: { 1: { value: 0, direction: 'horizontal', color: 'black', amount: 2 } },
+    dv2: { 1: { value: 0, direction: 'vertical', color: 'black', amount: 2 } },
+    oh2: { 1: { value: 0, direction: 'horizontal', color: 'black', amount: -1 } },
+    ov2: { 1: { value: 0, direction: 'vertical', color: 'black', amount: -1 } },
+    hvb2: { 1: { value: 0, direction: 'vertical', color: 'blue', amount: 3 } },
+    hvr2: { 1: { value: 0, direction: 'vertical', color: 'red', amount: 3 } },
+    hvy2: { 1: { value: 0, direction: 'vertical', color: 'yellow', amount: 3 } },
+    hdo2: { 1: { value: 0, direction: 'diagonal1', color: 'black', amount: 3 } },
+    hdt2: { 1: { value: 0, direction: 'diagonal2', color: 'black', amount: 3 } }
+}
+let hard_deck = {...easy_deck, ...hard_cards};
+let diff_deck = {...sum_deck, ...diff_cards};
+
+let harder_deck = {...easy_deck, ...hard_cards, ...hard_cards2};
+
+module.exports = { sum_deck, diff_deck, easy_deck, hard_deck, harder_deck, sprites}

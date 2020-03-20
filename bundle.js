@@ -104,6 +104,8 @@ var Tile = __webpack_require__(/*! ./tile */ "./components/tile.js");
 var _require = __webpack_require__(/*! ./util */ "./components/util.js"),
     easy_deck = _require.easy_deck,
     hard_deck = _require.hard_deck,
+    diff_deck = _require.diff_deck,
+    harder_deck = _require.harder_deck,
     sum_deck = _require.sum_deck,
     sprites = _require.sprites;
 
@@ -127,14 +129,32 @@ function () {
 
     this.promptCards = [];
     this.answers = [];
-    this.newBoard();
+    this.calcThings = true;
+    this.newBoard(3);
   }
 
   _createClass(Board, [{
     key: "newBoard",
     value: function newBoard() {
-      var keys = Object.keys(easy_deck);
-      var tDeckLen = Object.keys(easy_deck).length;
+      var difficulty = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var keys;
+      var tDeckLen;
+      var promptCardsDeck;
+
+      if (difficulty === 1) {
+        keys = Object.keys(easy_deck);
+        tDeckLen = Object.keys(easy_deck).length;
+        promptCardsDeck = sum_deck;
+      } else if (difficulty === 2) {
+        keys = Object.keys(hard_deck);
+        tDeckLen = Object.keys(hard_deck).length;
+        promptCardsDeck = diff_deck;
+      } else {
+        keys = Object.keys(harder_deck);
+        tDeckLen = Object.keys(harder_deck).length;
+        promptCardsDeck = diff_deck;
+      }
+
       var gridSize = this.grid.length * this.grid[0].length;
 
       for (var i = 0; i < gridSize; i++) {
@@ -147,18 +167,28 @@ function () {
       }
 
       while (this.promptCards.length < 3) {
-        var val = Math.floor(Math.random() * Object.keys(sum_deck).length);
+        var val = Math.floor(Math.random() * Object.keys(promptCardsDeck).length);
 
-        var _keys = Object.keys(sum_deck);
+        var _keys = Object.keys(promptCardsDeck);
 
         var answer = 0;
 
         if (!this.promptCards.includes(val)) {
           this.promptCards.push(_keys[val]);
-          var pCard = sum_deck[_keys[val]].values;
+          var pCard = promptCardsDeck[_keys[val]].values;
 
           for (var _i2 = 0; _i2 < pCard.length; _i2++) {
-            answer += this.calculate(pCard[_i2].type, pCard[_i2].color);
+            console.log('prompt card length is', this.promptCards.length); // if (keys[val][0] === 'd'){
+            //     debugger;
+            // }
+
+            if (_keys[val][0] !== 'd' || _i2 === 0) {
+              answer += this.calculate(pCard[_i2].type, pCard[_i2].color);
+              console.log('i is ', _i2, 'answer is ', answer, 'we added btw');
+            } else {
+              answer -= this.calculate(pCard[_i2].type, pCard[_i2].color);
+              console.log('i is ', _i2, 'answer is ', answer, 'we subrtacted btw');
+            }
           }
 
           this.answers.push(answer);
@@ -173,28 +203,85 @@ function () {
         for (var j = 0; j < this.grid[i].length; j++) {
           this.grid[i][j].draw(ctx);
         }
-      } // rotate around that point, converting our 
-      // angle from degrees to radians 
-      // draw it up and to the left by half the width
-      // and height of the image 
+      }
 
-
-      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15); // and restore the co-ords to how they were when we began
+      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15);
     }
   }, {
     key: "calculate",
     value: function calculate(type, color) {
       retVal = 0;
 
-      for (var i = 0; i < this.grid.length; i++) {
-        for (var j = 0; j < this.grid[i].length; j++) {
-          var t = hard_deck[this.grid[i][j].key];
+      if (this.calcThings === true) {
+        for (var i = 0; i < this.grid.length; i++) {
+          for (var j = 0; j < this.grid[i].length; j++) {
+            var t = harder_deck[this.grid[i][j].key];
 
-          for (var k = 1; k <= Object.keys(t).length; k++) {
-            if ((t[k].type === type || t[k].type === 'wild' || type === 'wild') && (t[k].color === color || t[k].color === 'black' || color === 'black')) {
-              retVal += t[k].value;
+            if (t[1].value === 0) {
+              switch (t[1].direction) {
+                case 'horizontal':
+                  for (var k = 0; k < this.grid[i].length; k++) {
+                    this.grid[k][j].multiplier[t[1].color] *= t[1].amount;
+                  }
+
+                  break;
+
+                case 'vertical':
+                  for (var _k = 0; _k < this.grid.length; _k++) {
+                    this.grid[i][_k].multiplier[t[1].color] *= t[1].amount;
+                  }
+
+                  break;
+
+                case 'diagonal1':
+                  for (var _k2 = 0; _k2 < this.grid.length - Math.abs(i - j); _k2++) {
+                    if (i > j) {
+                      this.grid[_k2 + (i - j)][_k2].multiplier[t[1].color] *= t[1].amount;
+                    } else {
+                      this.grid[_k2][_k2 + (j - i)].multiplier[t[1].color] *= t[1].amount;
+                    }
+                  }
+
+                  break;
+
+                case 'diagonal2':
+                  var u = i + j;
+
+                  for (var _k3 = 0; _k3 < u + 1; _k3++) {
+                    if (typeof this.grid[u - _k3] === 'undefined' || typeof this.grid[u - _k3][_k3] === 'undefined') {} else {
+                      this.grid[u - _k3][_k3].multiplier[t[1].color] *= t[1].amount;
+                    }
+                  }
+
+                  break;
+
+                default:
+                  break;
+              }
+            } // console.log(this.grid[i][j]);
+
+          }
+        }
+
+        this.calcThings = false;
+      }
+
+      for (var _i3 = 0; _i3 < this.grid.length; _i3++) {
+        for (var _j = 0; _j < this.grid[_i3].length; _j++) {
+          var _t = harder_deck[this.grid[_i3][_j].key];
+          var tileVal = 0;
+
+          for (var _k4 = 1; _k4 <= Object.keys(_t).length; _k4++) {
+            if (_t[_k4].value === 0) {} else if (_t[_k4].value !== 0 && (_t[_k4].type === type || _t[_k4].type === 'wild' || type === 'wild') && (_t[_k4].color === color || _t[_k4].color === 'black' || color === 'black')) {
+              tileVal += _t[_k4].value * this.grid[_i3][_j].multiplier[color];
+
+              if (color !== 'black') {
+                tileVal *= this.grid[_i3][_j].multiplier.black;
+              }
             }
           }
+
+          retVal += tileVal;
         }
       }
 
@@ -203,9 +290,7 @@ function () {
   }]);
 
   return Board;
-}(); // dir vertical -> all similar j values
-// dir horizontal -> all similar i values
-
+}();
 
 module.exports = Board;
 
@@ -313,10 +398,7 @@ function () {
         setTimeout(function () {
           return _this2.draw(ctx, x, y, hMul, wMul);
         }, 100);
-      } // ctx.beginPath();
-      // ctx.arc(x + this.height / 2, y + this.height / 2, this.height/2, 0, 2 * Math.PI);
-      // ctx.fill();
-
+      }
     }
   }, {
     key: "drawRotated",
@@ -336,10 +418,7 @@ function () {
         setTimeout(function () {
           return _this3.drawRotated(ctx, x, y, hMul, wMul);
         }, 100);
-      } // ctx.beginPath();
-      // ctx.arc(x + this.height / 2, y + this.height / 2, this.height/2, 0, 2 * Math.PI);
-      // ctx.fill();
-
+      }
     }
   }]);
 
@@ -377,7 +456,12 @@ function () {
     this.x = x;
     this.y = y;
     this.key = key;
-    this.multipliers = {};
+    this.multiplier = {
+      black: 1,
+      blue: 1,
+      red: 1,
+      yellow: 1
+    };
   }
 
   _createClass(Tile, [{
@@ -400,6 +484,12 @@ module.exports = Tile;
   \****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var Sprite = __webpack_require__(/*! ./sprite */ "./components/sprite.js");
 
@@ -1715,13 +1805,257 @@ var sprites = {
   yw: new Sprite('.././images/TotalYellow.png', 675, 1050),
   bc: new Sprite('.././images/Totalchicken.png', 675, 1050),
   bp: new Sprite('.././images/Totalpig.png', 675, 1050),
-  bs: new Sprite('.././images/Totalsheep.png', 675, 1050)
+  bs: new Sprite('.././images/Totalsheep.png', 675, 1050),
+  dbr: new Sprite('.././images/DifferenceBlueRed.png', 675, 1050),
+  dcp: new Sprite('.././images/Differencechickenpig.png', 675, 1050),
+  dps: new Sprite('.././images/Differencepigsheep.png', 675, 1050),
+  dry: new Sprite('.././images/DifferenceRedYellow.png', 675, 1050),
+  dsc: new Sprite('.././images/Differencesheepchicken.png', 675, 1050),
+  dyb: new Sprite('.././images/DifferenceYellowBlue.png', 675, 1050),
+  dh: new Sprite('.././images/DoubleHorizontal.png', 675, 1050),
+  dv: new Sprite('.././images/DoubleVertical.png', 675, 1050),
+  oh: new Sprite('.././images/OppositeHorizontal.png', 675, 1050),
+  ov: new Sprite('.././images/OppositeVertical.png', 675, 1050),
+  hvb: new Sprite('.././images/Tripleverticalblue.png', 675, 1050),
+  hvr: new Sprite('.././images/Tripleverticalred.png', 675, 1050),
+  hvy: new Sprite('.././images/Tripleverticalyellow.png', 675, 1050),
+  hdo: new Sprite('.././images/x3Diagonal1.png', 675, 1050),
+  hdt: new Sprite('.././images/x3Diagonal2.png', 675, 1050),
+  dbr2: new Sprite('.././images/DifferenceBlueRed.png', 675, 1050),
+  dcp2: new Sprite('.././images/Differencechickenpig.png', 675, 1050),
+  dps2: new Sprite('.././images/Differencepigsheep.png', 675, 1050),
+  dry2: new Sprite('.././images/DifferenceRedYellow.png', 675, 1050),
+  dsc2: new Sprite('.././images/Differencesheepchicken.png', 675, 1050),
+  dyb2: new Sprite('.././images/DifferenceYellowBlue.png', 675, 1050),
+  dh2: new Sprite('.././images/DoubleHorizontal.png', 675, 1050),
+  dv2: new Sprite('.././images/DoubleVertical.png', 675, 1050),
+  oh2: new Sprite('.././images/OppositeHorizontal.png', 675, 1050),
+  ov2: new Sprite('.././images/OppositeVertical.png', 675, 1050),
+  hvb2: new Sprite('.././images/Tripleverticalblue.png', 675, 1050),
+  hvr2: new Sprite('.././images/Tripleverticalred.png', 675, 1050),
+  hvy2: new Sprite('.././images/Tripleverticalyellow.png', 675, 1050),
+  hdo2: new Sprite('.././images/x3Diagonal1.png', 675, 1050),
+  hdt2: new Sprite('.././images/x3Diagonal2.png', 675, 1050)
+}; // let hard_deck = easy_deck;
+// let diff_deck = sum_deck;
+
+var diff_cards = {
+  dbr: {
+    values: [{
+      color: 'blue',
+      type: 'wild'
+    }, {
+      color: 'red',
+      type: 'wild'
+    }]
+  },
+  dcp: {
+    values: [{
+      color: 'black',
+      type: 'chicken'
+    }, {
+      color: 'black',
+      type: 'pig'
+    }]
+  },
+  dps: {
+    values: [{
+      color: 'black',
+      type: 'pig'
+    }, {
+      color: 'black',
+      type: 'sheep'
+    }]
+  },
+  dry: {
+    values: [{
+      color: 'red',
+      type: 'wild'
+    }, {
+      color: 'yellow',
+      type: 'wild'
+    }]
+  },
+  dsc: {
+    values: [{
+      color: 'black',
+      type: 'sheep'
+    }, {
+      color: 'black',
+      type: 'chicken'
+    }]
+  },
+  dyb: {
+    values: [{
+      color: 'yellow',
+      type: 'wild'
+    }, {
+      color: 'blue',
+      type: 'wild'
+    }]
+  }
 };
-var hard_deck = easy_deck;
+var hard_cards = {
+  dh: {
+    1: {
+      value: 0,
+      direction: 'horizontal',
+      color: 'black',
+      amount: 2
+    }
+  },
+  dv: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'black',
+      amount: 2
+    }
+  },
+  oh: {
+    1: {
+      value: 0,
+      direction: 'horizontal',
+      color: 'black',
+      amount: -1
+    }
+  },
+  ov: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'black',
+      amount: -1
+    }
+  },
+  hvb: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'blue',
+      amount: 3
+    }
+  },
+  hvr: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'red',
+      amount: 3
+    }
+  },
+  hvy: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'yellow',
+      amount: 3
+    }
+  },
+  hdo: {
+    1: {
+      value: 0,
+      direction: 'diagonal1',
+      color: 'black',
+      amount: 3
+    }
+  },
+  hdt: {
+    1: {
+      value: 0,
+      direction: 'diagonal2',
+      color: 'black',
+      amount: 3
+    }
+  }
+};
+var hard_cards2 = {
+  dh2: {
+    1: {
+      value: 0,
+      direction: 'horizontal',
+      color: 'black',
+      amount: 2
+    }
+  },
+  dv2: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'black',
+      amount: 2
+    }
+  },
+  oh2: {
+    1: {
+      value: 0,
+      direction: 'horizontal',
+      color: 'black',
+      amount: -1
+    }
+  },
+  ov2: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'black',
+      amount: -1
+    }
+  },
+  hvb2: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'blue',
+      amount: 3
+    }
+  },
+  hvr2: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'red',
+      amount: 3
+    }
+  },
+  hvy2: {
+    1: {
+      value: 0,
+      direction: 'vertical',
+      color: 'yellow',
+      amount: 3
+    }
+  },
+  hdo2: {
+    1: {
+      value: 0,
+      direction: 'diagonal1',
+      color: 'black',
+      amount: 3
+    }
+  },
+  hdt2: {
+    1: {
+      value: 0,
+      direction: 'diagonal2',
+      color: 'black',
+      amount: 3
+    }
+  }
+};
+
+var hard_deck = _objectSpread({}, easy_deck, {}, hard_cards);
+
+var diff_deck = _objectSpread({}, sum_deck, {}, diff_cards);
+
+var harder_deck = _objectSpread({}, easy_deck, {}, hard_cards, {}, hard_cards2);
+
 module.exports = {
   sum_deck: sum_deck,
+  diff_deck: diff_deck,
   easy_deck: easy_deck,
   hard_deck: hard_deck,
+  harder_deck: harder_deck,
   sprites: sprites
 };
 

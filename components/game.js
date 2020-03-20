@@ -2,7 +2,7 @@
 const Board = require('./board');
 // const circles = [];
 
-class Game {
+class Game { 
     constructor(){
         this.board = new Board(4,4);
         this.score = 0;

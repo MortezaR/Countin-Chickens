@@ -28,9 +28,6 @@ class Spirte {
         }else{
             setTimeout(() => this.draw(ctx,x,y,hMul,wMul), 100);
         }
-        // ctx.beginPath();
-        // ctx.arc(x + this.height / 2, y + this.height / 2, this.height/2, 0, 2 * Math.PI);
-        // ctx.fill();
     }
     drawRotated(ctx, x, y, hMul = 1, wMul = 1) {
         if(this.loaded){
@@ -52,9 +49,6 @@ class Spirte {
         }else{
             setTimeout(() => this.drawRotated(ctx,x,y,hMul,wMul), 100);
         }
-        // ctx.beginPath();
-        // ctx.arc(x + this.height / 2, y + this.height / 2, this.height/2, 0, 2 * Math.PI);
-        // ctx.fill();
     }
 }
 module.exports = Spirte;

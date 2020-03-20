@@ -4,7 +4,7 @@ class Tile {
         this.x = x;
         this.y = y;
         this.key = key;
-        this.multipliers = {}
+        this.multiplier = {black: 1, blue: 1, red: 1, yellow: 1};
     }
 
     draw(ctx){
