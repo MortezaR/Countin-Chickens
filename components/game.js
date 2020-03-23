@@ -3,9 +3,10 @@ const Board = require('./board');
 // const circles = [];
 
 class Game { 
-    constructor(){
-        this.board = new Board(4,4);
+    constructor(difficulty){
+        this.board = new Board(4, difficulty);
         this.score = 0;
+        this.difficulty = difficulty;
     }
     draw(canvasEl){
         const ctx = canvasEl.getContext("2d");
@@ -17,7 +18,7 @@ class Game {
             this.board.answers.shift();
             this.board.promptCards.shift();
             if(this.board.promptCards < 1){
-                this.board.newBoard();
+                this.board.newBoard(this.difficulty);
             }else{
                 // this.board.drawPromptCard(canvasEl);
             }

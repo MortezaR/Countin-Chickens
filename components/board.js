@@ -3,27 +3,27 @@ const Tile = require('./tile')
 const {easy_deck, hard_deck, diff_deck, harder_deck, sum_deck, sprites} = require('./util');
 
 class Board {
-    constructor(width, height){
-        this.grid = new Array(width);
-        for (let i = 0; i < width; i++) {
-            this.grid[i] = new Array(height);
+    constructor(length, difficulty){
+        this.grid = new Array(length);
+        for (let i = 0; i < length; i++) {
+            this.grid[i] = new Array(length);
         }
-        for (let i = 0; i < width; i++) {
-            for (let j = 0; j < height; j++) {
+        for (let i = 0; i < length; i++) {
+            for (let j = 0; j < length; j++) {
                 this.grid[i][j] = new Tile(i*101.25 + 600, j*157.5);
             }
         }
         this.promptCards = [];
         this.answers = [];
         this.calcThings = true;
-        this.newBoard(3);
+        this.newBoard(difficulty);
     }
-    newBoard(difficulty = 1){
+    newBoard(difficulty){
 
         let keys;
         let tDeckLen;
         let promptCardsDeck;
-        if(difficulty  === 1){
+        if(difficulty === 1){
             keys = Object.keys(easy_deck);
             tDeckLen = Object.keys(easy_deck).length;
             promptCardsDeck = sum_deck;

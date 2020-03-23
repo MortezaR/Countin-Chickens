@@ -112,17 +112,17 @@ var _require = __webpack_require__(/*! ./util */ "./components/util.js"),
 var Board =
 /*#__PURE__*/
 function () {
-  function Board(width, height) {
+  function Board(length, difficulty) {
     _classCallCheck(this, Board);
 
-    this.grid = new Array(width);
+    this.grid = new Array(length);
 
-    for (var i = 0; i < width; i++) {
-      this.grid[i] = new Array(height);
+    for (var i = 0; i < length; i++) {
+      this.grid[i] = new Array(length);
     }
 
-    for (var _i = 0; _i < width; _i++) {
-      for (var j = 0; j < height; j++) {
+    for (var _i = 0; _i < length; _i++) {
+      for (var j = 0; j < length; j++) {
         this.grid[_i][j] = new Tile(_i * 101.25 + 600, j * 157.5);
       }
     }
@@ -130,13 +130,12 @@ function () {
     this.promptCards = [];
     this.answers = [];
     this.calcThings = true;
-    this.newBoard(3);
+    this.newBoard(difficulty);
   }
 
   _createClass(Board, [{
     key: "newBoard",
-    value: function newBoard() {
-      var difficulty = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    value: function newBoard(difficulty) {
       var keys;
       var tDeckLen;
       var promptCardsDeck;
@@ -318,11 +317,12 @@ var Board = __webpack_require__(/*! ./board */ "./components/board.js"); // cons
 var Game =
 /*#__PURE__*/
 function () {
-  function Game() {
+  function Game(difficulty) {
     _classCallCheck(this, Game);
 
-    this.board = new Board(4, 4);
+    this.board = new Board(4, difficulty);
     this.score = 0;
+    this.difficulty = difficulty;
   }
 
   _createClass(Game, [{
@@ -340,7 +340,7 @@ function () {
         this.board.promptCards.shift();
 
         if (this.board.promptCards < 1) {
-          this.board.newBoard();
+          this.board.newBoard(this.difficulty);
         } else {// this.board.drawPromptCard(canvasEl);
         }
       }
@@ -2074,15 +2074,67 @@ var Game = __webpack_require__(/*! ./components/game */ "./components/game.js");
 
 document.addEventListener('DOMContentLoaded', function () {
   var root = document.getElementById('root');
-  runGame();
+  var high_scores_list = document.getElementById('root');
+  var start_menu_buttons = document.createElement('div');
+  var start_button = document.createElement('BUTTON');
+  var easy_button = document.createElement('BUTTON');
+  var medium_button = document.createElement('BUTTON');
+  var hard_button = document.createElement('BUTTON');
+  var difficulty = 1;
+  var high_scores = JSON.parse(localStorage.getItem('high_scores')) || [];
+  var high_scores_text = "<ul> High Scores <br />";
+
+  for (var i = 0; i < high_scores.length; i++) {
+    high_scores_text += '<li>' + (i + 1) + ': ' + high_scores[i] + '<li />';
+  }
+
+  high_scores_text += '<ul />';
+  high_scores_list.innerHTML = high_scores_text;
+  start_menu_buttons.id = 'start_menu_buttons';
+  start_button.innerHTML = "Play Game";
+  start_button.id = 'start_button';
+  root.appendChild(start_menu_buttons);
+  start_menu_buttons.appendChild(start_button);
+  easy_button.innerHTML = "Easy";
+  easy_button.id = 'easy_button';
+  start_menu_buttons.appendChild(easy_button);
+  easy_button.addEventListener('click', function () {
+    difficulty = 1;
+    easy_button.className = 'selected';
+    medium_button.className = 'unselected';
+    hard_button.className = 'unselected';
+  });
+  medium_button.innerHTML = "Hard";
+  medium_button.id = 'medium_button';
+  start_menu_buttons.appendChild(medium_button);
+  medium_button.addEventListener('click', function () {
+    difficulty = 2;
+    easy_button.className = 'unselected';
+    medium_button.className = 'selected';
+    hard_button.className = 'unselected';
+  });
+  hard_button.innerHTML = "Very Hard";
+  hard_button.id = 'hard_button';
+  start_menu_buttons.appendChild(hard_button);
+  hard_button.addEventListener('click', function () {
+    difficulty = 3;
+    easy_button.className = 'unselected';
+    medium_button.className = 'unselected';
+    hard_button.className = 'selected';
+  });
+  start_button.addEventListener('click', function () {
+    console.log(difficulty, '<- difficulty');
+    runGame(difficulty);
+  });
 });
 
-function runGame() {
+var runGame = function runGame(difficulty) {
+  start_menu_buttons.outerHTML = '';
   var game_canvas = document.getElementById('game-canvas');
   var context = game_canvas.getContext('2d');
   game_canvas.height = window.innerHeight;
   game_canvas.width = window.innerWidth;
-  var game = new Game();
+  var game = new Game(difficulty);
   game.draw(game_canvas);
   var score = document.createElement('div');
   score.innerHTML = 'Score: ' + game.score;
@@ -2097,9 +2149,14 @@ function runGame() {
   var runTime = function runTime() {
     time -= 1;
     timer.innerHTML = ' Time: ' + time;
+
+    if (time < 1) {
+      clearInterval(timeInterval);
+      gameOver(game.score * game.difficulty);
+    }
   };
 
-  setInterval(runTime, 1000);
+  var timeInterval = setInterval(runTime, 1000);
   var inputField = document.createElement("INPUT");
   inputField.setAttribute("type", "text");
   root.appendChild(inputField);
@@ -2115,7 +2172,31 @@ function runGame() {
 
   sumbitButton.addEventListener('click', handleSubmit);
   root.appendChild(sumbitButton);
-}
+};
+
+var gameOver = function gameOver(score) {
+  root.outerHTML = 'GAME OVER';
+  var canvas = document.getElementById('game-canvas');
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  var high_scores = JSON.parse(localStorage.getItem('high_scores')) || []; // if(high_scores === null) high_scores = [];
+  // debugger;
+
+  high_scores.push(score);
+  high_scores.sort();
+  high_scores.reverse(); // high_scores.splice(0, 9);
+
+  localStorage.setItem('high_scores', JSON.stringify(high_scores));
+  var high_scores_text = "<ul> High Scores <br />";
+
+  for (var i = 0; i < high_scores.length; i++) {
+    high_scores_text += '<li>' + (i + 1) + ': ' + high_scores[i] + '<li />';
+  }
+
+  high_scores_text += '<ul />';
+  high_scores_list.innerHTML = high_scores_text; // // Retrieve the object from storage
+  // console.log('retrievedObject: ', JSON.parse(retrievedObject));
+};
 
 /***/ })
 
