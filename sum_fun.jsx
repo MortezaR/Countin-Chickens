@@ -1,9 +1,9 @@
 const Game = require('./components/game')
-
+let start_menu_buttons;
 document.addEventListener('DOMContentLoaded', () => {
     const root = document.getElementById('root');
     const high_scores_list = document.getElementById('root');
-    const start_menu_buttons = document.createElement('div');
+    start_menu_buttons = document.createElement('div');
     const start_button = document.createElement('BUTTON');
     const easy_button = document.createElement('BUTTON');
     const medium_button = document.createElement('BUTTON');
@@ -58,7 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     start_button.addEventListener('click', ()=>{
-        console.log(difficulty, '<- difficulty')
+        // console.log(difficulty, '<- difficulty')
+        easy_button.className = 'unselected';
+        medium_button.className = 'unselected';
+        hard_button.className = 'unselected';
         runGame(difficulty);
     });
 })
@@ -76,7 +79,7 @@ const runGame = (difficulty) => {
     score.id = 'score';
     root.appendChild(score);
 
-    let time = 100;
+    let time = 5;
     let timer = document.createElement('div');
     timer.innerHTML = ' Time: ' + time;
     timer.id = 'timer';
@@ -111,7 +114,7 @@ const runGame = (difficulty) => {
 }
 
 const gameOver = (score) =>{
-    root.outerHTML = 'GAME OVER'
+    root.innerHTML = 'GAME OVER'
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -130,9 +133,12 @@ const gameOver = (score) =>{
     high_scores_text += '<ul />';
     high_scores_list.innerHTML = high_scores_text;
 
-    // // Retrieve the object from storage
-    
+    const restart_button = document.createElement('BUTTON');
 
-    // console.log('retrievedObject: ', JSON.parse(retrievedObject));
+    restart_button.addEventListener('click', () =>{
+        root.innerHTML = '';
+        root.appendChild(start_menu_buttons);
+    })
+    root.appendChild(restart_button);
 }
 

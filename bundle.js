@@ -2072,10 +2072,11 @@ module.exports = {
 
 var Game = __webpack_require__(/*! ./components/game */ "./components/game.js");
 
+var start_menu_buttons;
 document.addEventListener('DOMContentLoaded', function () {
   var root = document.getElementById('root');
   var high_scores_list = document.getElementById('root');
-  var start_menu_buttons = document.createElement('div');
+  start_menu_buttons = document.createElement('div');
   var start_button = document.createElement('BUTTON');
   var easy_button = document.createElement('BUTTON');
   var medium_button = document.createElement('BUTTON');
@@ -2123,7 +2124,10 @@ document.addEventListener('DOMContentLoaded', function () {
     hard_button.className = 'selected';
   });
   start_button.addEventListener('click', function () {
-    console.log(difficulty, '<- difficulty');
+    // console.log(difficulty, '<- difficulty')
+    easy_button.className = 'unselected';
+    medium_button.className = 'unselected';
+    hard_button.className = 'unselected';
     runGame(difficulty);
   });
 });
@@ -2140,7 +2144,7 @@ var runGame = function runGame(difficulty) {
   score.innerHTML = 'Score: ' + game.score;
   score.id = 'score';
   root.appendChild(score);
-  var time = 100;
+  var time = 5;
   var timer = document.createElement('div');
   timer.innerHTML = ' Time: ' + time;
   timer.id = 'timer';
@@ -2175,7 +2179,7 @@ var runGame = function runGame(difficulty) {
 };
 
 var gameOver = function gameOver(score) {
-  root.outerHTML = 'GAME OVER';
+  root.innerHTML = 'GAME OVER';
   var canvas = document.getElementById('game-canvas');
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2194,8 +2198,13 @@ var gameOver = function gameOver(score) {
   }
 
   high_scores_text += '<ul />';
-  high_scores_list.innerHTML = high_scores_text; // // Retrieve the object from storage
-  // console.log('retrievedObject: ', JSON.parse(retrievedObject));
+  high_scores_list.innerHTML = high_scores_text;
+  var restart_button = document.createElement('BUTTON');
+  restart_button.addEventListener('click', function () {
+    root.innerHTML = '';
+    root.appendChild(start_menu_buttons);
+  });
+  root.appendChild(restart_button);
 };
 
 /***/ })
