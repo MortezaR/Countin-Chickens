@@ -2183,13 +2183,11 @@ var gameOver = function gameOver(score) {
   var canvas = document.getElementById('game-canvas');
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  var high_scores = JSON.parse(localStorage.getItem('high_scores')) || []; // if(high_scores === null) high_scores = [];
-  // debugger;
-
+  var high_scores = JSON.parse(localStorage.getItem('high_scores')) || [];
   high_scores.push(score);
   high_scores.sort();
-  high_scores.reverse(); // high_scores.splice(0, 9);
-
+  high_scores.reverse();
+  high_scores = high_scores.slice(0, 10);
   localStorage.setItem('high_scores', JSON.stringify(high_scores));
   var high_scores_text = "<ul> High Scores <br />";
 

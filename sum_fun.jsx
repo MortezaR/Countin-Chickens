@@ -119,12 +119,10 @@ const gameOver = (score) =>{
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let high_scores = JSON.parse(localStorage.getItem('high_scores')) || [];
-    // if(high_scores === null) high_scores = [];
-    // debugger;
     high_scores.push(score);
     high_scores.sort();
     high_scores.reverse();
-    // high_scores.splice(0, 9);
+    high_scores = high_scores.slice(0, 10);
     localStorage.setItem('high_scores', JSON.stringify(high_scores));
     let high_scores_text = "<ul> High Scores <br />";
     for (let i = 0; i < high_scores.length; i++) {
