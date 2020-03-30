@@ -19,9 +19,9 @@ class Game {
             this.board.promptCards.shift();
             if(this.board.promptCards < 1){
                 this.board.newBoard(this.difficulty);
-            }else{
-                // this.board.drawPromptCard(canvasEl);
             }
+        }else{
+            this.score -= 1;
         }
     }
 }

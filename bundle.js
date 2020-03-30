@@ -204,7 +204,7 @@ function () {
         }
       }
 
-      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15);
+      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15); // sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
     }
   }, {
     key: "calculate",
@@ -341,8 +341,9 @@ function () {
 
         if (this.board.promptCards < 1) {
           this.board.newBoard(this.difficulty);
-        } else {// this.board.drawPromptCard(canvasEl);
         }
+      } else {
+        this.score -= 1;
       }
     }
   }]);
@@ -2075,7 +2076,7 @@ var Game = __webpack_require__(/*! ./components/game */ "./components/game.js");
 var start_menu_buttons;
 document.addEventListener('DOMContentLoaded', function () {
   var root = document.getElementById('root');
-  var high_scores_list = document.getElementById('root');
+  var high_scores_list = document.getElementById('high_scores_list');
   start_menu_buttons = document.createElement('div');
   var start_button = document.createElement('BUTTON');
   var easy_button = document.createElement('BUTTON');
@@ -2083,17 +2084,18 @@ document.addEventListener('DOMContentLoaded', function () {
   var hard_button = document.createElement('BUTTON');
   var difficulty = 1;
   var high_scores = JSON.parse(localStorage.getItem('high_scores')) || [];
-  var high_scores_text = "<ul> High Scores <br />";
+  var high_scores_text = "<ul> ";
 
   for (var i = 0; i < high_scores.length; i++) {
-    high_scores_text += '<li>' + (i + 1) + ': ' + high_scores[i] + '<li />';
+    high_scores_text += '<li> <span class="span1">' + (i + 1) + ':' + '</span> <span class="span2">' + high_scores[i] + '</span></li>';
   }
 
-  high_scores_text += '<ul />';
+  high_scores_text += '</ul>';
   high_scores_list.innerHTML = high_scores_text;
   start_menu_buttons.id = 'start_menu_buttons';
   start_button.innerHTML = "Play Game";
   start_button.id = 'start_button';
+  start_button.className += 'menu_button';
   root.appendChild(start_menu_buttons);
   start_menu_buttons.appendChild(start_button);
   easy_button.innerHTML = "Easy";
@@ -2135,20 +2137,24 @@ document.addEventListener('DOMContentLoaded', function () {
 var runGame = function runGame(difficulty) {
   start_menu_buttons.outerHTML = '';
   var game_canvas = document.getElementById('game-canvas');
+  var inGameMenu = document.createElement('div');
+  inGameMenu.id = 'inGameMenu';
   var context = game_canvas.getContext('2d');
-  game_canvas.height = window.innerHeight;
-  game_canvas.width = window.innerWidth;
+  game_canvas.height = 675;
+  game_canvas.width = 1100;
   var game = new Game(difficulty);
   game.draw(game_canvas);
   var score = document.createElement('div');
   score.innerHTML = 'Score: ' + game.score;
   score.id = 'score';
-  root.appendChild(score);
-  var time = 5;
+  score.className = "menu_text";
+  inGameMenu.appendChild(score);
+  var time = 100;
   var timer = document.createElement('div');
   timer.innerHTML = ' Time: ' + time;
   timer.id = 'timer';
-  root.appendChild(timer);
+  timer.className = "menu_text";
+  inGameMenu.appendChild(timer);
 
   var runTime = function runTime() {
     time -= 1;
@@ -2161,46 +2167,76 @@ var runGame = function runGame(difficulty) {
   };
 
   var timeInterval = setInterval(runTime, 1000);
-  var inputField = document.createElement("INPUT");
-  inputField.setAttribute("type", "text");
-  root.appendChild(inputField);
+  var inputField = document.createElement("div");
+  inputField.id = 'inputField'; // inputField.setAttribute("type", "text");
+
+  root.appendChild(inGameMenu);
+  inGameMenu.appendChild(inputField); // inputField.focus();
+
   var sumbitButton = document.createElement("BUTTON");
+  sumbitButton.innerHTML = 'Submit';
 
   var handleSubmit = function handleSubmit() {
-    game.guess(inputField.value);
+    if (inputField.innerHTML === '') return false;
+    game.guess(inputField.innerHTML);
     context.clearRect(0, 0, game_canvas.width, game_canvas.height);
     game.draw(game_canvas);
     score.innerHTML = 'Score: ' + game.score;
-    inputField.value = '';
+    inputField.innerHTML = '';
   };
 
+  window.addEventListener('keypress', function (e) {
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+
+    if (e.keyCode < 48 || e.keyCode > 57) {
+      // debugger
+      if (e.keyCode === 45) {
+        if (inputField.innerHTML[0] === '-') {
+          inputField.innerHTML = inputField.innerHTML.slice(1, inputField.innerHTML.length);
+        } else {
+          inputField.innerHTML = '-' + inputField.innerHTML;
+        }
+      }
+
+      return false;
+    } else {
+      inputField.innerHTML += e.key;
+    }
+  });
   sumbitButton.addEventListener('click', handleSubmit);
-  root.appendChild(sumbitButton);
+  inGameMenu.appendChild(sumbitButton);
 };
 
 var gameOver = function gameOver(score) {
-  root.innerHTML = 'GAME OVER';
+  root.innerHTML = '<div class="menu_text" id="game_over">GAME OVER</div>';
   var canvas = document.getElementById('game-canvas');
-  var ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  var high_scores_list = document.getElementById('high_scores_list');
   var high_scores = JSON.parse(localStorage.getItem('high_scores')) || [];
   high_scores.push(score);
-  high_scores.sort();
+  high_scores.sort(function (a, b) {
+    return a - b;
+  });
   high_scores.reverse();
   high_scores = high_scores.slice(0, 10);
   localStorage.setItem('high_scores', JSON.stringify(high_scores));
-  var high_scores_text = "<ul> High Scores <br />";
+  var high_scores_text = "<ul> ";
 
   for (var i = 0; i < high_scores.length; i++) {
-    high_scores_text += '<li>' + (i + 1) + ': ' + high_scores[i] + '<li />';
+    high_scores_text += '<li> <span class="span1">' + (i + 1) + ':' + '</span> <span class="span2">' + high_scores[i] + '</span></li>';
   }
 
-  high_scores_text += '<ul />';
+  high_scores_text += '</ul>';
   high_scores_list.innerHTML = high_scores_text;
   var restart_button = document.createElement('BUTTON');
+  restart_button.id = 'restart_button';
+  restart_button.innerHTML = 'Play Again';
   restart_button.addEventListener('click', function () {
     root.innerHTML = '';
     root.appendChild(start_menu_buttons);
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   });
   root.appendChild(restart_button);
 };

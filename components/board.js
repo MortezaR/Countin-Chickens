@@ -75,6 +75,7 @@ class Board {
             }
         }
         sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15);
+        // sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
     }
     calculate(type, color){
         retVal = 0;

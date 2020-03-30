@@ -1,12 +1,185 @@
-div {
+#root {
     display: flex;
     justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    margin-right: 5%;
 }
+#start_menu_buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.menu_text{
+    color: #eee;
+    background-color: rgb(19, 17, 17, 0.8);
+    border-radius: 3px;
+    padding: 1px;
+    padding-top:5px;
+    padding-bottom:5px;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 0px 1px #000;
+    min-width: 80px;
+    box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+#game_over{
+    background-color: rgb(19, 17, 17, 0.8);
+    padding: 3px;
+    margin-right: 20px;
+    border-radius: 3px;
+    color: red;
+    font-size: 30px;
+    box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+#game_and_score{
+    display: flex;
+    justify-content: space-between;
+}
+#inGameMenu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#inGameMenu > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+    
 button {
     width: 50px;
     height: 50px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 2px;
+    background: #32557f;
+    display: inline-block;
+    color: #fff;
+    border-radius: 3px 3px 0px 0px;
+    box-shadow: 0 0.5rem 0.8rem #00000080;
 }
 .selected{
     height: 60px;
     width: 60px;
+}
+#inputField{
+    width: 125px;
+    height: 40px;
+    text-align: center;
+    box-shadow: 0 0.5rem 0.8rem #00000080;
+    font-size: 30px;
+}
+
+ul li{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    width: inherit;
+    display: flex;
+    padding: 5px;
+}
+h1{
+    display: flex;
+    justify-content: center;
+    font-size: 50px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    margin-right: 5%;
+    color: #eee;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 0px 2px 4px #00000080;
+    /* box-shadow: 0 0.5rem 0.8rem #00000080; */
+}
+.span1{
+    display: flex;
+    align-items: center;
+    min-width: 50px;
+}
+.span2{
+    width: 100%;
+    font-size: 30px;
+    margin-right: 50px;
+    border-style: dashed;
+    border-width: 1px;
+    padding: 3px;
+    padding-left: 15px;
+}
+
+
+body {
+  background: green;
+  font-family: "Lato", sans-serif;
+}
+
+.warpper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 60px;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0px 2px;
+  background: #32557f;
+  display: inline-block;
+  color: #fff;
+  border-radius: 3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+
+.panels {
+  background: #fff;
+  box-shadow: 0 2rem 2rem #00000080;
+  min-height: 200px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 3px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.panel {
+  display: none;
+  animation: fadein 0.8s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.panel-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+.panel-content {
+    margin-top: 4px;
+}
+
+.radio {
+  display: none;
+}
+
+#one:checked ~ .panels #one-panel,
+#two:checked ~ .panels #two-panel,
+#three:checked ~ .panels #three-panel {
+  display: block;
+}
+
+#one:checked ~ .tabs #one-tab,
+#two:checked ~ .tabs #two-tab,
+#three:checked ~ .tabs #three-tab {
+  background: #fff;
+  color: #000;
+  border-top: 3px solid #32557f;
 }
