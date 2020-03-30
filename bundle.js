@@ -278,7 +278,7 @@ function () {
                 tileVal *= this.grid[_i3][_j].multiplier.black;
               }
 
-              console.log('tile value ', tileVal, ' coordinates ', _i3, _j);
+              console.log('tile value ', tileVal, 'multiplier', this.grid[_i3][_j].multiplier, ' coordinates ', _i3, _j);
             }
           }
 
@@ -335,7 +335,7 @@ function () {
     key: "guess",
     value: function guess(num) {
       if (num == this.board.answers[0]) {
-        this.score += 1;
+        this.score += 2;
         this.board.answers.shift();
         this.board.promptCards.shift();
 
@@ -1375,7 +1375,7 @@ var easy_deck = {
     2: {
       value: 1,
       color: 'red',
-      type: 'pig'
+      type: 'sheep'
     },
     3: {
       value: 1,
@@ -2185,19 +2185,22 @@ var runGame = function runGame(difficulty) {
     inputField.innerHTML = '';
   };
 
-  window.addEventListener('keypress', function (e) {
+  window.addEventListener('keydown', function (e) {
     if (e.keyCode === 13) {
       handleSubmit();
     }
 
     if (e.keyCode < 48 || e.keyCode > 57) {
-      // debugger
-      if (e.keyCode === 45) {
+      if (e.keyCode === 189) {
         if (inputField.innerHTML[0] === '-') {
           inputField.innerHTML = inputField.innerHTML.slice(1, inputField.innerHTML.length);
         } else {
           inputField.innerHTML = '-' + inputField.innerHTML;
         }
+      }
+
+      if (e.keyCode === 8 && inputField.innerHTML.length > 0) {
+        inputField.innerHTML = inputField.innerHTML.slice(0, inputField.innerHTML.length - 1);
       }
 
       return false;

@@ -14,7 +14,7 @@ class Game {
     }
     guess(num){
         if(num == this.board.answers[0]){
-            this.score += 1;
+            this.score += 2;
             this.board.answers.shift();
             this.board.promptCards.shift();
             if(this.board.promptCards < 1){

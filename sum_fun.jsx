@@ -119,19 +119,22 @@ const runGame = (difficulty) => {
         score.innerHTML = 'Score: ' + game.score;
         inputField.innerHTML = '';
     }
-    window.addEventListener('keypress', e=> {
+    window.addEventListener('keydown', e=> {
         if(e.keyCode === 13){
             handleSubmit();
         }
         if (e.keyCode < 48 || e.keyCode > 57) {
-            // debugger
-            if(e.keyCode === 45){
+            if(e.keyCode === 189){
                 if(inputField.innerHTML[0] === '-'){
                     inputField.innerHTML = inputField.innerHTML
                     .slice(1,inputField.innerHTML.length);
                 }else{
                     inputField.innerHTML = '-' + inputField.innerHTML;
                 }
+            }
+            if (e.keyCode === 8 && inputField.innerHTML.length > 0){
+                inputField.innerHTML = inputField.innerHTML
+                    .slice(0, inputField.innerHTML.length -1);
             }
             return false;
         }else{

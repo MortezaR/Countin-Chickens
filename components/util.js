@@ -106,7 +106,7 @@ let easy_deck = {
     hkp: { 1: { value: 3, color: 'black', type: 'pig' } },
 
     oycoysoyp: { 1: { value: 1, color: 'yellow', type: 'chicken' }, 2: { value: 1, color: 'yellow', type: 'sheep' }, 3: { value: 1, color: 'yellow', type: 'pig' } },
-    orcorsorp: { 1: { value: 1, color: 'red', type: 'chicken' }, 2: { value: 1, color: 'red', type: 'pig' }, 3: { value: 1, color: 'red', type: 'pig' } },
+    orcorsorp: { 1: { value: 1, color: 'red', type: 'chicken' }, 2: { value: 1, color: 'red', type: 'sheep' }, 3: { value: 1, color: 'red', type: 'pig' } },
     obcobsobp: { 1: { value: 1, color: 'blue', type: 'chicken' }, 2: { value: 1, color: 'blue', type: 'sheep' }, 3: { value: 1, color: 'blue', type: 'pig' } },
     okcobsokp: { 1: { value: 1, color: 'black', type: 'chicken' }, 2: { value: 1, color: 'black', type: 'sheep' }, 3: { value: 1, color: 'black', type: 'pig' } },
     oycorcobc: { 1: { value: 1, color: 'yellow', type: 'chicken' }, 2: { value: 1, color: 'red', type: 'chicken' }, 3: { value: 1, color: 'blue', type: 'chicken' } },
