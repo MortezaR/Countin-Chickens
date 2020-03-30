@@ -57,8 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         medium_button.className = 'unselected';
         hard_button.className = 'selected';
      })
-
-
     start_button.addEventListener('click', ()=>{
         // console.log(difficulty, '<- difficulty')
         easy_button.className = 'unselected';

@@ -95,6 +95,18 @@ h1{
     text-shadow: 0px 2px 4px #00000080;
     /* box-shadow: 0 0.5rem 0.8rem #00000080; */
 }
+.logo{
+  height: 80px;
+  width: 80px;
+  margin: 20px;
+  
+}
+#about-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .span1{
     display: flex;
     align-items: center;
