@@ -177,9 +177,7 @@ function () {
           var pCard = promptCardsDeck[_keys[val]].values;
 
           for (var _i2 = 0; _i2 < pCard.length; _i2++) {
-            console.log('prompt card length is', this.promptCards.length); // if (keys[val][0] === 'd'){
-            //     debugger;
-            // }
+            console.log('prompt card length is', this.promptCards.length);
 
             if (_keys[val][0] !== 'd' || _i2 === 0) {
               answer += this.calculate(pCard[_i2].type, pCard[_i2].color);
@@ -204,7 +202,7 @@ function () {
         }
       }
 
-      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15); // sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
+      sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15);
     }
   }, {
     key: "calculate",
@@ -257,8 +255,7 @@ function () {
                 default:
                   break;
               }
-            } // console.log(this.grid[i][j]);
-
+            }
           }
         }
 
@@ -271,17 +268,20 @@ function () {
           var tileVal = 0;
 
           for (var _k4 = 1; _k4 <= Object.keys(_t).length; _k4++) {
+            var singleTileVal = 0;
+
             if (_t[_k4].value === 0) {} else if (_t[_k4].value !== 0 && (_t[_k4].type === type || _t[_k4].type === 'wild' || type === 'wild') && (_t[_k4].color === color || _t[_k4].color === 'black' || color === 'black')) {
-              tileVal += _t[_k4].value * this.grid[_i3][_j].multiplier[color];
+              singleTileVal += _t[_k4].value * this.grid[_i3][_j].multiplier[color];
 
               if (color !== 'black') {
-                tileVal *= this.grid[_i3][_j].multiplier.black;
+                singleTileVal *= this.grid[_i3][_j].multiplier.black;
               }
-
-              console.log('tile value ', tileVal, 'multiplier', this.grid[_i3][_j].multiplier, ' coordinates ', _i3, _j);
             }
+
+            tileVal += singleTileVal;
           }
 
+          console.log('tile value ', tileVal, 'multiplier', this.grid[_i3][_j].multiplier, ' coordinates ', _i3, _j);
           retVal += tileVal;
         }
       }

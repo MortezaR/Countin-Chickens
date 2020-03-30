@@ -63,6 +63,8 @@ button {
 .selected{
     height: 60px;
     width: 60px;
+    background-color: white;
+    color: black;
 }
 #inputField{
     width: 125px;

@@ -52,9 +52,6 @@ class Board {
                 let pCard = promptCardsDeck[keys[val]].values;
                 for(let i = 0; i < pCard.length; i++){
                     console.log('prompt card length is', this.promptCards.length);
-                    // if (keys[val][0] === 'd'){
-                    //     debugger;
-                    // }
                     if (keys[val][0] !== 'd' || i === 0){
                         answer += this.calculate(pCard[i].type, pCard[i].color);
                         console.log('i is ', i, 'answer is ', answer, 'we added btw');
@@ -75,7 +72,6 @@ class Board {
             }
         }
         sprites[this.promptCards[0]].drawRotated(ctx, 0, 0, 0.15, 0.15);
-        // sprites[this.promptCards[0]].draw(ctx, 0, 0, 0.15, 0.15);
     }
     calculate(type, color){
         retVal = 0;
@@ -117,7 +113,6 @@ class Board {
                                 break;
                         }  
                     }
-                    // console.log(this.grid[i][j]);
                 }
             }
             this.calcThings = false;
@@ -127,20 +122,22 @@ class Board {
                 let t = harder_deck[this.grid[i][j].key];
                 let tileVal = 0;
                 for(let k = 1; k <= Object.keys(t).length; k++){
+                    let singleTileVal = 0;
                     if(t[k].value === 0){
                         
                     }else if (t[k].value !== 0
                     && (t[k].type === type || t[k].type === 'wild' || type === 'wild') 
                     && (t[k].color === color || t[k].color === 'black' || color === 'black')){
-                        tileVal += t[k].value * this.grid[i][j].multiplier[color];
+                        singleTileVal += t[k].value * this.grid[i][j].multiplier[color];
                         
                         if(color !== 'black'){
-                            tileVal *= this.grid[i][j].multiplier.black;
+                            singleTileVal *= this.grid[i][j].multiplier.black;
                         }
-                        console.log('tile value ', tileVal, 'multiplier',
-                         this.grid[i][j].multiplier, ' coordinates ', i, j);
                     }
+                    tileVal += singleTileVal;
                 }
+                console.log('tile value ', tileVal, 'multiplier',
+                this.grid[i][j].multiplier, ' coordinates ', i, j);
                 retVal += tileVal;
             }
         }
