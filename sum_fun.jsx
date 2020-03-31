@@ -1,6 +1,7 @@
 const Game = require('./components/game')
 let start_menu_buttons;
 document.addEventListener('DOMContentLoaded', () => {
+    console.log(window.innerWidth, window.outerWidth)
     const root = document.getElementById('root');
     const high_scores_list = document.getElementById('high_scores_list');
     start_menu_buttons = document.createElement('div');

@@ -10,7 +10,7 @@ class Board {
         }
         for (let i = 0; i < length; i++) {
             for (let j = 0; j < length; j++) {
-                this.grid[i][j] = new Tile(i*101.25 + 600, j*157.5);
+                this.grid[i][j] = new Tile(i*101.25 + window.innerWidth * 0.35, j*157.5);
             }
         }
         this.promptCards = [];
