@@ -1,3 +1,4 @@
+
 #root {
     display: flex;
     justify-content: center;
@@ -49,21 +50,24 @@
 }
     
 button {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     cursor: pointer;
     padding: 10px;
     margin: 2px;
-    background: #32557f;
+    /* background: #32557f; */
     display: inline-block;
-    color: #fff;
+    color: black;
     border-radius: 3px 3px 0px 0px;
     box-shadow: 0 0.5rem 0.8rem #00000080;
+    background-image: url(https://mortezar.github.io/Countin-Chickens/images/Button_Back.jpg);
+    background-size: 80px;
 }
 .selected{
-    height: 60px;
-    width: 60px;
-    background-color: white;
+    height: 100px;
+    width: 100px;
+    background-size: 100px;
+    /* background-color: white; */
     color: black;
 }
 #inputField{
@@ -124,15 +128,19 @@ h1{
 
 
 body {
-  background: green;
+  background-image: url(https://mortezar.github.io/Countin-Chickens/images/Checker_Background.png);
   font-family: "Lato", sans-serif;
 }
 
 .warpper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
   margin-right: 60px;
+  position: fixed;
+  right: 0;
+
+
 }
 
 .tab {
@@ -197,4 +205,9 @@ body {
   background: #fff;
   color: #000;
   border-top: 3px solid #32557f;
+}
+
+.couting_chickens_logo{
+  height: 200px;
+  /* position: fixed; */
 }
