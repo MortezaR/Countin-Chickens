@@ -1,10 +1,12 @@
 const Game = require('./components/game')
 let start_menu_buttons;
+let instructions;
 document.addEventListener('DOMContentLoaded', () => {
     console.log(window.innerWidth, window.outerWidth)
     const root = document.getElementById('root');
     const high_scores_list = document.getElementById('high_scores_list');
     start_menu_buttons = document.createElement('div');
+    instructions = document.createElement('div');
     const start_button = document.createElement('BUTTON');
     const easy_button = document.createElement('BUTTON');
     const medium_button = document.createElement('BUTTON');
@@ -24,11 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     high_scores_list.innerHTML = high_scores_text;
 
     start_menu_buttons.id = 'start_menu_buttons';
+    instructions.id = 'instructions';
 
     start_button.innerHTML = "Play Game"
     start_button.id = 'start_button';
     start_button.className += 'menu_button';
     root.appendChild(start_menu_buttons);
+    root.appendChild(instructions);
     start_menu_buttons.appendChild(start_button);
 
     easy_button.innerHTML = "Easy"
@@ -39,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         easy_button.className = 'selected';
         medium_button.className = 'unselected';
         hard_button.className = 'unselected';
+        instructions.removeChild(inst3);
+
      })
     medium_button.innerHTML = "Hard"
     medium_button.id = 'medium_button';
@@ -48,6 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         easy_button.className = 'unselected';
         medium_button.className = 'selected';
         hard_button.className = 'unselected';
+        instructions.appendChild(inst3);
+
     })
     hard_button.innerHTML = "Very Hard"
     hard_button.id = 'hard_button';
@@ -57,17 +65,33 @@ document.addEventListener('DOMContentLoaded', () => {
         easy_button.className = 'unselected';
         medium_button.className = 'unselected';
         hard_button.className = 'selected';
+        instructions.appendChild(inst3);
+
      })
     start_button.addEventListener('click', ()=>{
         // console.log(difficulty, '<- difficulty')
         easy_button.className = 'unselected';
         medium_button.className = 'unselected';
         hard_button.className = 'unselected';
+        
         runGame(difficulty);
     });
+    var inst1 = document.createElement("img");
+    inst1.src = "https://mortezar.github.io/Countin-Chickens/images/Page_1.png";
+    var inst2 = document.createElement("img");
+    inst2.src = "https://mortezar.github.io/Countin-Chickens/images/Page_2.png";
+    var inst3 = document.createElement("img");
+    inst3.src = "https://mortezar.github.io/Countin-Chickens/images/Page_3.png";
+    inst1.className = 'instructions_image'
+    inst2.className = 'instructions_image'
+    inst3.className = 'instructions_image'
+    instructions.appendChild(inst1);
+    instructions.appendChild(inst2);
+    // instructions.appendChild(inst3);
 })
 const runGame = (difficulty) => {
     start_menu_buttons.outerHTML = '';
+    instructions.outerHTML = '';
     const game_canvas = document.getElementById('game-canvas');
     const inGameMenu = document.createElement('div');
     inGameMenu.id = 'inGameMenu';
@@ -170,6 +194,7 @@ const gameOver = (score) =>{
     restart_button.addEventListener('click', () =>{
         root.innerHTML = '';
         root.appendChild(start_menu_buttons);
+        root.appendChild(instructions)
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     })

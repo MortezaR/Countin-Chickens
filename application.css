@@ -5,6 +5,7 @@
     align-items: center;
     min-height: 100px;
     margin-right: 5%;
+    margin-top: 7%;
 }
 #start_menu_buttons{
     display: flex;
@@ -32,6 +33,7 @@
     color: red;
     font-size: 30px;
     box-shadow: 0 0.5rem 0.8rem #00000080;
+    /* max-width: 300px; */
 }
 #game_and_score{
     display: flex;
@@ -209,5 +211,21 @@ body {
 
 .couting_chickens_logo{
   height: 200px;
-  /* position: fixed; */
+  position: absolute;
+  /* margin: 70px; */
+  margin-top: -40px;
+  margin-left: 200px;
+}
+.instructions_image{
+  height: 450px;
+  margin: 10px;
+  /* display: flex;
+  justify-content: space-between; */
+}
+#instructions{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  /* margin-right: 60%; */
+  margin-top: 300px;
 }

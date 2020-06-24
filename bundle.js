@@ -2074,11 +2074,13 @@ module.exports = {
 var Game = __webpack_require__(/*! ./components/game */ "./components/game.js");
 
 var start_menu_buttons;
+var instructions;
 document.addEventListener('DOMContentLoaded', function () {
   console.log(window.innerWidth, window.outerWidth);
   var root = document.getElementById('root');
   var high_scores_list = document.getElementById('high_scores_list');
   start_menu_buttons = document.createElement('div');
+  instructions = document.createElement('div');
   var start_button = document.createElement('BUTTON');
   var easy_button = document.createElement('BUTTON');
   var medium_button = document.createElement('BUTTON');
@@ -2094,10 +2096,12 @@ document.addEventListener('DOMContentLoaded', function () {
   high_scores_text += '</ul>';
   high_scores_list.innerHTML = high_scores_text;
   start_menu_buttons.id = 'start_menu_buttons';
+  instructions.id = 'instructions';
   start_button.innerHTML = "Play Game";
   start_button.id = 'start_button';
   start_button.className += 'menu_button';
   root.appendChild(start_menu_buttons);
+  root.appendChild(instructions);
   start_menu_buttons.appendChild(start_button);
   easy_button.innerHTML = "Easy";
   easy_button.id = 'easy_button';
@@ -2107,6 +2111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     easy_button.className = 'selected';
     medium_button.className = 'unselected';
     hard_button.className = 'unselected';
+    instructions.removeChild(inst3);
   });
   medium_button.innerHTML = "Hard";
   medium_button.id = 'medium_button';
@@ -2116,6 +2121,7 @@ document.addEventListener('DOMContentLoaded', function () {
     easy_button.className = 'unselected';
     medium_button.className = 'selected';
     hard_button.className = 'unselected';
+    instructions.appendChild(inst3);
   });
   hard_button.innerHTML = "Very Hard";
   hard_button.id = 'hard_button';
@@ -2125,6 +2131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     easy_button.className = 'unselected';
     medium_button.className = 'unselected';
     hard_button.className = 'selected';
+    instructions.appendChild(inst3);
   });
   start_button.addEventListener('click', function () {
     // console.log(difficulty, '<- difficulty')
@@ -2133,10 +2140,22 @@ document.addEventListener('DOMContentLoaded', function () {
     hard_button.className = 'unselected';
     runGame(difficulty);
   });
+  var inst1 = document.createElement("img");
+  inst1.src = "https://mortezar.github.io/Countin-Chickens/images/Page_1.png";
+  var inst2 = document.createElement("img");
+  inst2.src = "https://mortezar.github.io/Countin-Chickens/images/Page_2.png";
+  var inst3 = document.createElement("img");
+  inst3.src = "https://mortezar.github.io/Countin-Chickens/images/Page_3.png";
+  inst1.className = 'instructions_image';
+  inst2.className = 'instructions_image';
+  inst3.className = 'instructions_image';
+  instructions.appendChild(inst1);
+  instructions.appendChild(inst2); // instructions.appendChild(inst3);
 });
 
 var runGame = function runGame(difficulty) {
   start_menu_buttons.outerHTML = '';
+  instructions.outerHTML = '';
   var game_canvas = document.getElementById('game-canvas');
   var inGameMenu = document.createElement('div');
   inGameMenu.id = 'inGameMenu';
@@ -2239,6 +2258,7 @@ var gameOver = function gameOver(score) {
   restart_button.addEventListener('click', function () {
     root.innerHTML = '';
     root.appendChild(start_menu_buttons);
+    root.appendChild(instructions);
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   });
