@@ -219,6 +219,7 @@ body {
 .instructions_image{
   height: 450px;
   margin: 10px;
+  margin-top: 46vh;
   /* display: flex;
   justify-content: space-between; */
 }
